@@ -1,0 +1,606 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Resultados
+{% endblock %}
+
+{% block contenido %}
+
+<div class="row g-4">
+
+    <div class="col-6 col-lg-3">
+        <div class="card shadow text-center border-success">
+            <div class="card-body">
+                <h6>Capital Final</h6>
+                <h3 class="text-success stat-number">
+                    ${{ "{:,.0f}".format(capital_final) }}
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+        <div class="card shadow text-center border-warning">
+            <div class="card-body">
+                <h6>Ganancia</h6>
+                <h3 class="text-warning stat-number">
+                    ${{ "{:,.0f}".format(interes_ganado) }}
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+        <div class="card shadow text-center border-info">
+            <div class="card-body">
+                <h6>Capital Real</h6>
+                <h3 class="text-info stat-number">
+                    ${{ "{:,.0f}".format(capital_ajustado) }}
+                </h3>
+                <small>
+                    Ajustado por inflación
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+        <div class="card shadow text-center border-danger">
+            <div class="card-body">
+                <h6>Ritmo de crecimiento actual</h6>
+                <h3 class="text-danger stat-number">
+                    ${{ "{:,.0f}".format(velocidad) }}
+                </h3>
+                <small>
+                    por año, ahora mismo
+                </small>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<hr class="my-5">
+
+<div class="card shadow border-primary">
+
+    <div class="card-header bg-primary text-white">
+
+        <h3>💬 ¿Qué significa esto para tu plata?</h3>
+
+    </div>
+
+    <div class="card-body">
+
+        <p>
+
+            Empezaste con
+            <strong>${{ "{:,.0f}".format(capital) }}</strong>.
+            Después de <strong>{{ tiempo|limpio }}</strong> años, tu capital llega a
+            <strong>${{ "{:,.0f}".format(capital_final) }}</strong>
+            (${{ "{:,.0f}".format(capital_ajustado) }} en poder de compra de hoy, una vez descontada la inflación).
+
+        </p>
+
+        <p>
+
+            {% if tipo == "simple" %}
+            Con interés simple, tu inversión crece siempre al mismo ritmo:
+            aproximadamente <strong>${{ "{:,.0f}".format(velocidad) }} cada año</strong>,
+            todos los años por igual. Es un crecimiento parejo, como una escalera
+            de peldaños iguales.
+            {% else %}
+            Con interés compuesto, ahora mismo (en el año {{ tiempo|limpio }}) tu inversión
+            está creciendo a un ritmo de aproximadamente
+            <strong>${{ "{:,.0f}".format(velocidad) }} por año</strong>. A diferencia
+            del interés simple, este ritmo se acelera con el tiempo: mientras más
+            grande se hace tu capital, más rápido sigue creciendo, porque los
+            intereses generan nuevos intereses.
+            {% endif %}
+
+        </p>
+
+        <p class="mb-0">
+
+            {% if tipo == "simple" %}
+            Y algo importante: mientras la tasa de interés sea positiva, tu capital
+            nunca deja de crecer ni se estanca, aunque lo hace siempre al mismo
+            ritmo constante, por más años que pasen.
+            {% else %}
+            Y algo importante: mientras la tasa de interés sea positiva, tu capital
+            nunca deja de crecer ni se estanca — al contrario, con interés compuesto
+            crece cada vez más rápido mientras más tiempo pase.
+            {% endif %}
+
+        </p>
+
+        <button
+            class="btn btn-outline-primary btn-sm mt-3"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#notacionMatematica"
+        >
+            Ver la notación matemática (opcional)
+        </button>
+
+        <div class="collapse mt-3" id="notacionMatematica">
+
+            <div class="card card-body bg-light">
+
+                <p class="mb-2">
+                    Lo anterior corresponde a la <strong>derivada</strong> de la
+                    función de capital (la velocidad instantánea de crecimiento) y a
+                    su <strong>límite</strong> cuando el tiempo tiende a infinito:
+                </p>
+
+                <p class="text-center mb-1">
+                    Derivada evaluada en \( t={{ tiempo|limpio }} \):
+                    \( C'({{ tiempo|limpio }}) \approx {{ "{:,.0f}".format(velocidad) }} \)
+                </p>
+
+                <p class="text-center">
+                    Expresión general de la derivada:
+                    \( C'(t) = {{ derivada_latex|safe }} \)
+                </p>
+
+                <p class="text-center">
+                    Límite: \( \displaystyle\lim_{t\rightarrow\infty}C(t) = {{ limite_latex|safe }} \)
+                </p>
+
+                <hr>
+
+                {% if tipo == "simple" %}
+
+                <p class="mb-1">Función utilizada (interés simple):</p>
+                <div class="formula-box">$$ C(t)=C_0(1+i\,t) $$</div>
+                <p class="mb-1">Derivada:</p>
+                <div class="formula-box">$$ C'(t)=C_0\,i $$</div>
+
+                {% else %}
+
+                <p class="mb-1">Función utilizada (interés compuesto):</p>
+                <div class="formula-box">$$ C(t)=C_0(1+i)^t $$</div>
+                <p class="mb-1">Derivada:</p>
+                <div class="formula-box">$$ C'(t)=C_0(1+i)^t\ln(1+i) $$</div>
+
+                {% if aporte > 0 %}
+                <div class="alert alert-warning mt-2 mb-0">
+                    <strong>Nota:</strong> la derivada y el límite de arriba
+                    corresponden al modelo de interés compuesto puro (sin aportes).
+                    El capital final que se muestra sí incluye tus aportes
+                    mensuales, que suman un componente adicional en cada
+                    capitalización.
+                </div>
+                {% endif %}
+
+                {% endif %}
+
+                <p class="text-secondary mt-3 mb-0">
+                    ¿Quieres entender qué son la derivada y el límite desde cero?
+                    Visita el <a href="/educacion">Centro Educativo</a>.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<hr class="my-5">
+
+<h3 class="mb-4">📈 Crecimiento de la inversión</h3>
+
+<div class="card shadow">
+
+    <div class="card-body">
+
+        {{ grafico|safe }}
+
+    </div>
+
+</div>
+
+
+
+<hr class="my-5">
+
+<div class="card shadow">
+
+    <div class="card-header bg-success text-white">
+
+        <h3>📊 Comparación de Modelos</h3>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+        <table class="table table-striped table-bordered text-center">
+
+            <thead class="table-light">
+
+                <tr>
+
+                    <th>Concepto</th>
+
+                    <th>Interés Simple</th>
+
+                    <th>Interés Compuesto</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <th>Capital Final</th>
+
+                    <td>${{ "{:,.0f}".format(capital_simple) }}</td>
+
+                    <td>${{ "{:,.0f}".format(capital_compuesto) }}</td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Ganancia</th>
+
+                    <td>${{ "{:,.0f}".format(ganancia_simple) }}</td>
+
+                    <td>${{ "{:,.0f}".format(ganancia_compuesta) }}</td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Diferencia</th>
+
+                    <td colspan="2">
+
+                        <strong class="text-success">
+
+                            +${{ "{:,.0f}".format(diferencia) }}
+
+                        </strong>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<hr class="my-5">
+
+<h3 class="mb-4">
+
+📈 Comparación Visual
+
+</h3>
+
+<div class="card shadow">
+
+    <div class="card-body">
+
+        {{ grafico_comparativo|safe }}
+
+    </div>
+
+</div>
+
+
+
+<div class="alert alert-secondary mt-3">
+
+    <h5>
+
+        📖 Interpretación del gráfico
+
+    </h5>
+    <ul>
+
+        <li>
+
+            🔵 <strong>Interés Simple:</strong>
+
+            crecimiento lineal.
+
+        </li>
+
+        <li>
+
+            🟢 <strong>Interés Compuesto:</strong>
+
+            los intereses generan nuevos intereses.
+
+        </li>
+
+        <li>
+
+            🔴 <strong>Compuesto + Aportes:</strong>
+
+            además del interés compuesto,
+            el inversionista agrega dinero periódicamente.
+
+        </li>
+
+    </ul>
+
+</div>
+
+
+
+
+
+
+<div class="alert alert-success mt-4">
+
+    <h4>
+
+        💡 Recomendación Automática
+
+    </h4>
+
+    <p>
+
+        El interés compuesto entrega aproximadamente
+
+        <strong>
+
+            {{ "{:.2f}".format(porcentaje_mejora) }}%
+
+        </strong>
+
+        más rentabilidad que el interés simple.
+
+    </p>
+
+    <p>
+
+        Para este escenario se recomienda utilizar
+
+        <strong>interés compuesto</strong>
+
+        para maximizar el crecimiento de la inversión.
+
+    </p>
+
+</div>
+
+{% if comparacion_frecuencias %}
+
+<hr class="my-5">
+
+<div class="card shadow">
+
+    <div class="card-header bg-info text-white">
+
+        <h3>🔁 ¿Importa cada cuánto se capitalizan los intereses?</h3>
+
+    </div>
+
+    <div class="card-body">
+
+        <p>
+
+            Con el mismo capital, tasa y tiempo (sin aportes), así cambia tu
+            capital final según cada cuánto se "recalculan" los intereses
+            (capitalización):
+
+        </p>
+
+        {% if aporte > 0 %}
+        <div class="alert alert-warning">
+            <strong>Nota:</strong> esta tabla es solo para comparar el efecto
+            de la frecuencia, por eso los montos son menores a tu Capital
+            Final de arriba: no incluye los ${{ "{:,.0f}".format(aporte) }}
+            de aporte mensual que sí estás considerando en tu simulación.
+        </div>
+        {% endif %}
+
+        <div class="table-responsive">
+
+        <table class="table table-bordered text-center">
+
+            <thead class="table-light">
+
+                <tr>
+
+                    <th>Frecuencia</th>
+
+                    <th>Veces por año</th>
+
+                    <th>Capital Final</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for nombre, veces, capital_f in comparacion_frecuencias %}
+
+                <tr>
+
+                    <td>{{ nombre }}</td>
+
+                    <td>{{ veces }}</td>
+
+                    <td>${{ "{:,.0f}".format(capital_f) }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        </div>
+
+        <p class="text-secondary mb-0">
+
+            Mientras más seguido se capitalizan los intereses, un poco más
+            rápido crece tu capital — aunque la diferencia entre capitalizar
+            mensual o anual suele ser menor de lo que la gente cree. Lo que
+            más impacta el resultado sigue siendo la tasa y el tiempo.
+
+        </p>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
+<hr class="my-5">
+
+<h3 class="mb-4 fade-up">🧠 Análisis Inteligente</h3>
+
+<div class="row g-4">
+
+    <div class="col-md-6">
+        <div class="card shadow h-100">
+            <div class="card-header bg-warning">
+                <h3>⚠️ Evaluación de Riesgo</h3>
+            </div>
+            <div class="card-body">
+                <h2>{{ riesgo }}</h2>
+                <p class="mt-3 mb-0">
+                    {{ descripcion_riesgo }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow border-success h-100">
+            <div class="card-header bg-success text-white">
+                <h3>📊 Salud de la Inversión</h3>
+            </div>
+            <div class="card-body text-center">
+                <h1>{{ puntaje }}/100</h1>
+                <h3>{{ estado }}</h3>
+                <div class="progress mt-4" style="height:30px;">
+                    <div
+                        class="progress-bar bg-success"
+                        style="width: {{ puntaje }}%;"
+                    >
+                        {{ puntaje }}%
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow h-100">
+            <div class="card-header bg-success text-white">
+                <h3>💡 Recomendaciones</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for r in recomendaciones %}
+                    <li class="list-group-item">
+                        ✔ {{ r }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow h-100">
+            <div class="card-header bg-primary text-white">
+                <h3>🔎 Otros datos a considerar</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for mensaje in analisis %}
+                    <li class="list-group-item">
+                        {{ mensaje }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="card shadow mt-4">
+
+    <div class="card-header bg-primary text-white">
+        <h3>📅 Escenarios Automáticos</h3>
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+        <table class="table table-bordered text-center">
+
+            <thead>
+
+                <tr>
+
+                    <th>Años</th>
+
+                    <th>Interés Simple</th>
+
+                    <th>Interés Compuesto</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for e in escenarios %}
+
+                <tr>
+
+                    <td>{{ e[0] }}</td>
+
+                    <td>
+
+                        ${{ "{:,.0f}".format(e[1]) }}
+
+                    </td>
+
+                    <td>
+
+                        ${{ "{:,.0f}".format(e[2]) }}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

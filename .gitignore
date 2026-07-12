@@ -1,0 +1,22 @@
+# Entorno virtual (se recrea con: pip install -r requirements.txt)
+venv/
+env/
+
+# Bytecode de Python
+__pycache__/
+*.pyc
+
+# Base de datos local (se recrea sola al iniciar la app)
+simulador.db
+simulaciones.db
+
+# PDFs generados por la app al exportar una simulación
+static/reporte_*.pdf
+
+# Archivos propios del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Configuración de editores/IDE
+.vscode/
+.idea/

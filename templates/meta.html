@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Meta de Ahorro
+{% endblock %}
+
+{% block contenido %}
+
+<h2 class="mb-3 text-center">
+
+🎯 Calculadora de Meta de Ahorro
+
+</h2>
+
+<p class="text-secondary mb-4" style="max-width:650px; margin-left:auto; margin-right:auto;">
+
+    Esta calculadora funciona al revés del simulador principal: tú eliges
+    <strong>cuánto quieres juntar</strong> y <strong>en cuánto tiempo</strong>
+    quieres lograrlo, y ella calcula <strong>cuánto tienes que ahorrar cada
+    mes</strong> para llegar. El "tiempo" no es un resultado, es una meta que
+    tú defines — por ejemplo "quiero tener $5.000.000 en 3 años".
+
+</p>
+
+<div class="card shadow" style="max-width:650px; margin-left:auto; margin-right:auto;">
+
+    <div class="card-body">
+
+        <form method="POST">
+
+        <div class="mb-3">
+
+        <label class="form-label">
+
+        Capital Inicial
+
+        </label>
+
+        <input
+        type="number"
+        name="capital"
+        class="form-control"
+        value="0"
+        required>
+        <div class="form-text">Lo que ya tienes ahorrado hoy (puede ser $0).</div>
+
+        </div>
+
+        <div class="mb-3">
+
+        <label class="form-label">
+
+        Meta Deseada
+
+        </label>
+
+        <input
+        type="number"
+        name="meta"
+        class="form-control"
+        required>
+        <div class="form-text">A cuánto quieres llegar en total.</div>
+
+        </div>
+
+        <div class="mb-3">
+
+        <label class="form-label">
+
+        Tasa anual (%)
+
+        </label>
+
+        <input
+        type="number"
+        step="0.01"
+        name="tasa"
+        class="form-control"
+        required>
+        <div class="form-text">A qué interés anual crece tu plata mientras tanto (banco, fondo, etc.).</div>
+
+        </div>
+
+        <div class="mb-3">
+
+        <label class="form-label">
+
+        Tiempo (años)
+
+        </label>
+
+        <input
+        type="number"
+        step="0.1"
+        name="tiempo"
+        class="form-control"
+        required>
+        <div class="form-text">En cuántos años quieres lograr tu meta — esto lo decides tú, no es un resultado.</div>
+
+        </div>
+
+        <button
+        class="btn btn-success w-100">
+
+        Calcular
+
+        </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% if ahorro is not none %}
+
+<hr class="my-4">
+
+<div class="alert alert-success" style="max-width:650px; margin-left:auto; margin-right:auto;">
+
+<p class="mb-2">
+
+    Partiendo de <strong>${{ "{:,.0f}".format(capital) }}</strong> y con una
+    tasa de <strong>{{ tasa|limpio }}%</strong> anual, para llegar a
+    <strong>${{ "{:,.0f}".format(objetivo) }}</strong> en
+    <strong>{{ tiempo|limpio }}</strong> años necesitas ahorrar:
+
+</p>
+
+<h2>
+
+${{ "{:,.0f}".format(ahorro) }}
+
+</h2>
+
+<p class="mb-0">
+
+cada mes.
+
+</p>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

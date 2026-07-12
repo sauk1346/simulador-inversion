@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Inicio
+{% endblock %}
+
+{% block contenido %}
+
+<h1 class="text-center mb-3 fade-up">
+
+<i class="bi bi-graph-up-arrow text-success"></i>
+
+Simulador de Ahorro e Inversión
+
+</h1>
+
+<p class="text-center text-secondary mb-5" style="max-width:650px; margin-left:auto; margin-right:auto;">
+
+    Ingresa cuánto tienes, a qué tasa y por cuánto tiempo, y te mostramos
+    cuánto crecería tu plata — explicado en español simple, sin necesidad
+    de saber matemáticas avanzadas.
+
+</p>
+
+{% if datos[0] and datos[0] > 0 %}
+
+<div class="row g-4 mb-5">
+
+    <div class="col-md-4">
+
+        <div class="card shadow text-center">
+
+            <div class="card-body">
+
+                <h6>Total Simulaciones</h6>
+
+                <h2>{{ datos[0] }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card shadow text-center">
+
+            <div class="card-body">
+
+                <h6>Capital Promedio</h6>
+
+                <h4>
+
+                    ${{ "{:,.0f}".format(datos[1] or 0) }}
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+<div class="col-md-4">
+
+    <div class="card shadow text-center border-success">
+
+        <div class="card-body">
+
+            <h6>Ganancia Promedio</h6>
+
+            <h4 class="text-success">
+
+                ${{ "{:,.0f}".format(datos[2] or 0) }}
+
+            </h4>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="col-md-4">
+
+    <div class="card shadow text-center border-warning">
+
+        <div class="card-body">
+
+            <h6>Mayor Ganancia</h6>
+
+            <h4 class="text-warning">
+
+                ${{ "{:,.0f}".format(datos[3] or 0) }}
+
+            </h4>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+<div class="col-md-4">
+
+        <div class="card shadow text-center">
+
+            <div class="card-body">
+
+                <h6>Capital Total Invertido</h6>
+
+                <h4>
+
+                    ${{ "{:,.0f}".format(datos[4] or 0) }}
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card shadow text-center">
+
+            <div class="card-body">
+
+                <h6>Tipo Más Utilizado</h6>
+
+                <h4>
+
+                    {{ favorito }}
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card shadow mb-5">
+
+    <div class="card-header bg-success text-white">
+
+        <h3>
+
+            📈 Evolución de las Simulaciones
+
+        </h3>
+
+    </div>
+
+    <div class="card-body">
+
+        {{ grafico|safe }}
+
+    </div>
+
+</div>
+
+
+
+<hr class="my-5">
+
+<h3>
+
+Últimas simulaciones
+
+</h3>
+
+<table class="table table-striped">
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+
+<th>Capital</th>
+
+<th>Tipo</th>
+
+<th>Capital Final</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for s in ultimas %}
+
+<tr>
+
+<td>{{ s[0] }}</td>
+
+<td>${{ "{:,.0f}".format(s[1]) }}</td>
+
+<td>{{ s[4] }}</td>
+
+<td>${{ "{:,.0f}".format(s[5]) }}</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+<div class="text-center mt-5">
+
+<a href="/simulador"
+
+class="btn btn-success btn-lg">
+
+<i class="bi bi-plus-circle-fill"></i>
+
+Nueva Simulación
+
+</a>
+
+</div>
+
+{% else %}
+
+<div class="card shadow text-center mb-5">
+
+    <div class="card-body py-5">
+
+        <h3 class="mb-3">👋 Todavía no tienes simulaciones</h3>
+
+        <p class="text-secondary mb-4" style="max-width:500px; margin-left:auto; margin-right:auto;">
+
+            Prueba con un caso real o inventado: cuánto tienes ahorrado,
+            a qué tasa, y por cuántos años. Te mostraremos cuánto crecería
+            tu plata y qué tan rápido lo está haciendo.
+
+        </p>
+
+        <a href="/simulador" class="btn btn-success btn-lg">
+
+            <i class="bi bi-plus-circle-fill"></i>
+            Probar el Simulador
+
+        </a>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

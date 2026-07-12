@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Simulador
+{% endblock %}
+
+{% block contenido %}
+
+<p class="text-secondary mb-4">
+    Completa estos datos con tu situación (o unos números de prueba) y te
+    mostramos cómo crecería tu plata en el tiempo.
+</p>
+
+<div class="row">
+
+    <div class="col-lg-7">
+
+        <div class="card shadow">
+
+            <div class="card-header bg-primary text-white">
+
+                <h3>Simulador de Inversión</h3>
+
+            </div>
+
+            <div class="card-body">
+
+                <form action="/resultado" method="POST">
+
+                    <div class="mb-3">
+                        <label class="form-label">Capital Inicial ($)</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            name="capital"
+                            placeholder="Ej: 100000"
+                            required>
+                        <div class="form-text">Cuánta plata pones al empezar.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Tasa de interés anual (%)</label>
+                        <input
+                            type="number"
+                            step="0.01"
+                            class="form-control"
+                            name="tasa"
+                            placeholder="Ej: 8"
+                            required>
+                        <div class="form-text">El porcentaje que ofrece el banco o la inversión, por año.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Tiempo (años)</label>
+                        <input
+                            type="number"
+                            step="0.1"
+                            class="form-control"
+                            name="tiempo"
+                            placeholder="Ej: 5"
+                            required>
+                        <div class="form-text">Por cuántos años dejarás la plata invertida.</div>
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            Tipo de interés
+
+                        </label>
+
+                        <select class="form-select" name="tipo">
+
+                            <option value="simple">
+
+                                Interés Simple
+
+                            </option>
+
+                            <option value="compuesto" selected>
+
+                                Interés Compuesto
+
+                            </option>
+
+                        </select>
+
+                        <div class="form-text">
+                            Simple: ganas siempre lo mismo cada año.
+                            Compuesto: lo que ganas también genera intereses (crece más rápido).
+                        </div>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Frecuencia de capitalización
+                        </label>
+
+                        <select class="form-select" name="frecuencia">
+                            <option value="1">Anual</option>
+                            <option value="2">Semestral</option>
+                            <option value="4">Trimestral</option>
+                            <option value="12" selected>Mensual</option>
+                        </select>
+
+                        <div class="form-text">
+                            Cada cuánto se "recalculan" los intereses. Mientras más
+                            seguido, un poco más rápido crece tu plata. Solo aplica
+                            al interés compuesto sin aportes; si agregas un aporte
+                            mensual, se asume capitalización mensual.
+                        </div>
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Aporte mensual ($)
+                        </label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            name="aporte"
+                            value="0"
+                            min="0"
+                            step="1000"
+                            required
+                        >
+                        <div class="form-text">Si además vas a ahorrar algo cada mes, ponlo aquí (opcional).</div>
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Inflación anual (%)
+                        </label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            name="inflacion"
+                            value="3"
+                            min="0"
+                            max="100"
+                            step="0.1"
+                            required
+                        >
+                        <div class="form-text">Cuánto sube el costo de vida cada año (para saber cuánto vale de verdad tu plata al final).</div>
+
+                    </div>
+
+                    <button class="btn btn-success w-100">
+
+                        Calcular inversión
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-5">
+
+        <div class="card shadow">
+
+            <div class="card-header bg-dark text-white">
+
+                ¿Qué vas a ver en el resultado?
+
+            </div>
+
+            <div class="card-body">
+
+                <ul>
+
+                    <li>Cuánto tendrás al final, en pesos.</li>
+
+                    <li>Cuánto ganaste realmente (y cuánto vale eso ya descontada la inflación).</li>
+
+                    <li>Qué tan rápido está creciendo tu plata ahora mismo.</li>
+
+                    <li>Si tu inversión sigue creciendo para siempre o se estanca con el tiempo.</li>
+
+                    <li>Un gráfico para ver la evolución de un vistazo.</li>
+
+                </ul>
+
+                <p class="text-secondary mb-0">
+                    ¿No conoces términos como "derivada" o "límite"? No es
+                    necesario: el resultado se explica en español simple.
+                    Si quieres entender la matemática detrás, puedes visitar el
+                    <a href="/educacion">Centro Educativo</a>.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Centro Educativo
+{% endblock %}
+
+{% block contenido %}
+
+<h1 class="mb-4 text-center">
+
+📚 Centro Educativo Matemático
+
+</h1>
+
+<p class="text-center text-secondary mb-5" style="max-width:700px; margin-left:auto; margin-right:auto;">
+
+    No necesitas saber cálculo para usar el simulador — los resultados se
+    explican en español simple. Esta página es solo para quienes tengan
+    curiosidad de entender la matemática que hay detrás, explicada con
+    ejemplos cotidianos antes de la fórmula formal.
+
+</p>
+
+<div class="accordion" id="acordeon">
+
+    <div class="accordion-item">
+
+        <h2 class="accordion-header">
+
+            <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#funciones">
+
+                ¿Qué es la función que usa el simulador?
+
+            </button>
+
+        </h2>
+
+        <div id="funciones" class="accordion-collapse collapse show">
+
+            <div class="accordion-body">
+
+                <p>
+
+                    Piensa en una función como una <strong>máquina</strong>: le
+                    metes un número de años y te devuelve cuánta plata tendrás
+                    en ese momento. En este proyecto usamos dos "máquinas"
+                    distintas, según el tipo de interés:
+
+                </p>
+
+                <p><strong>Interés simple</strong> — cada año ganas exactamente lo mismo (crecimiento lineal):</p>
+
+                <div class="formula-box">
+                    $$
+                    C(t)=C_0(1+i\,t)
+                    $$
+                </div>
+
+                <p><strong>Interés compuesto</strong> — lo que ganas también empieza a generar más ganancia (crecimiento exponencial):</p>
+
+                <div class="formula-box">
+                    $$
+                    C(t)=C_0(1+i)^t
+                    $$
+                </div>
+
+                <p>
+
+                    donde:
+
+                </p>
+
+                <ul>
+
+                    <li>\( C_0 \) = tu capital inicial</li>
+
+                    <li>\( i \) = la tasa de interés (en decimal, ej. 8% = 0.08)</li>
+
+                    <li>\( t \) = el tiempo, en años</li>
+
+                    <li>\( C(t) \) = cuánta plata tienes después de \( t \) años</li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="accordion-item">
+
+        <h2 class="accordion-header">
+
+            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#derivadas">
+
+                ¿Qué es la derivada? (el "velocímetro" de tu dinero)
+
+            </button>
+
+        </h2>
+
+        <div id="derivadas" class="accordion-collapse collapse">
+
+            <div class="accordion-body">
+
+                <p>
+
+                    Imagina el velocímetro de un auto: no te dice el promedio
+                    de todo el viaje, te dice <strong>qué tan rápido vas en
+                    este preciso instante</strong>. La derivada hace lo mismo,
+                    pero con tu dinero: te dice a qué velocidad está creciendo
+                    tu capital <strong>justo ahora</strong>, no en promedio.
+
+                </p>
+
+                <p><strong>Interés simple</strong> — el velocímetro siempre marca lo mismo, tu plata crece a ritmo constante:</p>
+
+                <div class="formula-box">
+                    $$
+                    C'(t)=C_0\,i
+                    $$
+                </div>
+
+                <p><strong>Interés compuesto</strong> — el velocímetro va subiendo con el tiempo: mientras más grande es tu capital, más rápido crece:</p>
+
+                <div class="formula-box">
+                    $$
+                    C'(t)=C_0(1+i)^t\ln(1+i)
+                    $$
+                </div>
+
+                <p class="mb-0">
+
+                    \( C'(t) \) se lee "la derivada de \( C \) respecto a \( t \)",
+                    y el resultado se mide en <strong>pesos por año</strong> — por
+                    eso el simulador lo muestra como "ritmo de crecimiento actual".
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="accordion-item">
+
+        <h2 class="accordion-header">
+
+            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#limites">
+
+                ¿Qué es el límite? (dejar crecer tu plata "para siempre")
+
+            </button>
+
+        </h2>
+
+        <div id="limites" class="accordion-collapse collapse">
+
+            <div class="accordion-body">
+
+                <p>
+
+                    Es un experimento mental: ¿qué pasaría con tu capital si
+                    lo dejaras invertido no 5 ni 10 años, sino
+                    <strong>indefinidamente</strong>? El límite responde esa
+                    pregunta sin tener que esperar toda una vida.
+
+                </p>
+
+                <p>
+
+                    Mientras la tasa de interés sea positiva, la respuesta es
+                    siempre la misma en ambos modelos: tu capital nunca deja
+                    de crecer ni se estanca en un techo — sigue subiendo sin
+                    límite.
+
+                </p>
+
+                <div class="formula-box">
+                    $$
+                    \lim_{t\rightarrow\infty}C(t)=\infty
+                    $$
+                </div>
+
+                <p class="mb-0">
+
+                    La diferencia entre los dos modelos no está en si llegan a
+                    un techo (ninguno lo hace), sino en <strong>qué tan rápido
+                    suben</strong>: con interés simple suben a paso constante,
+                    con interés compuesto aceleran con el tiempo.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="accordion-item">
+
+        <h2 class="accordion-header">
+
+            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#frecuencia">
+
+                ¿Qué es la "frecuencia de capitalización"?
+
+            </button>
+
+        </h2>
+
+        <div id="frecuencia" class="accordion-collapse collapse">
+
+            <div class="accordion-body">
+
+                <p>
+
+                    "Capitalizar" es el momento en que el banco toma los
+                    intereses que ganaste y los suma a tu capital, para que
+                    desde ese momento esos intereses también generen
+                    intereses. La frecuencia es cada cuánto ocurre eso:
+                    una vez al año (anual), cada 6 meses (semestral), cada 3
+                    meses (trimestral) o cada mes (mensual).
+
+                </p>
+
+                <p class="mb-0">
+
+                    Mientras más seguido se capitaliza, un poco más rápido
+                    crece tu plata — porque los intereses empiezan a generar
+                    nuevos intereses antes. El simulador te deja comparar esto
+                    directamente cuando eliges interés compuesto.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="accordion-item">
+
+        <h2 class="accordion-header">
+
+            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#inflacion">
+
+                ¿Por qué se descuenta la inflación?
+
+            </button>
+
+        </h2>
+
+        <div id="inflacion" class="accordion-collapse collapse">
+
+            <div class="accordion-body">
+
+                <p>
+
+                    La inflación es la subida general de precios: con el
+                    tiempo, el mismo billete compra menos cosas. Por eso, aunque
+                    tu número en pesos haya crecido, tu <strong>poder de
+                    compra real</strong> puede haber crecido menos de lo que
+                    parece.
+
+                </p>
+
+                <p class="mb-0">
+
+                    Por eso el simulador también calcula el "capital real":
+                    cuánto vale tu resultado final en pesos de hoy, ya
+                    descontado ese efecto.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="text-center mt-5">
+
+    <p class="text-secondary">¿Listo para ver esto aplicado a tu propio caso?</p>
+
+    <a href="/simulador" class="btn btn-success btn-lg">
+
+        <i class="bi bi-calculator"></i>
+        Ir al Simulador
+
+    </a>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Historial
+{% endblock %}
+
+{% block contenido %}
+
+<h2 class="mb-4">
+
+📋 Historial de Simulaciones
+
+</h2>
+
+{% if simulaciones %}
+
+<div class="mb-3">
+
+    <a
+        href="/vaciar"
+        class="btn btn-danger"
+        onclick="return confirm('¿Seguro que deseas eliminar TODO el historial?')"
+    >
+
+        🗑 Vaciar Historial
+
+    </a>
+
+</div>
+
+<div class="card shadow">
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-hover table-striped mb-0">
+
+<thead class="table-dark">
+
+<tr>
+
+<th>ID</th>
+
+<th>Capital</th>
+
+<th>Tasa</th>
+
+<th>Tiempo</th>
+
+<th>Tipo</th>
+
+<th>Capital Final</th>
+
+<th>Ganancia</th>
+
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for s in simulaciones %}
+
+<tr>
+
+<td>{{ s[0] }}</td>
+
+<td>${{ "{:,.0f}".format(s[1]) }}</td>
+
+<td>{{ (s[2]*100)|limpio }}%</td>
+
+<td>{{ s[3]|limpio }}</td>
+
+<td>{{ s[4] }}</td>
+
+<td>${{ "{:,.0f}".format(s[5]) }}</td>
+
+<td class="text-success">
+
+${{ "{:,.0f}".format(s[6]) }}
+
+</td>
+
+<td>
+
+    <a
+    href="/pdf/{{ s[0] }}"
+    class="btn btn-primary btn-sm">
+
+    📄
+
+    </a>
+
+    <a
+    href="/eliminar/{{ s[0] }}"
+    class="btn btn-danger btn-sm">
+
+    🗑
+
+    </a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+{% else %}
+
+<div class="card shadow text-center">
+
+    <div class="card-body py-5">
+
+        <h4 class="mb-3">📭 Aún no hay simulaciones guardadas</h4>
+
+        <p class="text-secondary mb-4">
+
+            Cada vez que calcules una inversión en el simulador, va a
+            aparecer aquí para que puedas compararlas o exportarlas en PDF.
+
+        </p>
+
+        <a href="/simulador" class="btn btn-success btn-lg">
+
+            <i class="bi bi-plus-circle-fill"></i>
+            Ir al Simulador
+
+        </a>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}
